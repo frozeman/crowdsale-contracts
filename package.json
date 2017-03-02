@@ -1,0 +1,13 @@
+{
+  "name": "lunyr-crowdsale",
+  "version": "0.0.1",
+  "description": "Lunyr Token Crowdsale",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "ethereumjs-testrpc": "^3.0.3",
+    "truffle": "^2.1.1"
+  },
+  "author": "Lunyr"
+}
