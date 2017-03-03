@@ -880,7 +880,9 @@ contract('Crowdsale', function(accounts){
           utils.mineToBlockHeight(endBlock);
           // let 1 spend 0's money
           return token.approve(accounts[1], 2, {from:accounts[0]});
-        }).then(function(){
+        }).then(function(receipt){
+          assert.equal(receipt.logs.length, 1);
+          assert.equal(receipt.logs[0].event, 'Approval');
           return token.allowance(accounts[0], accounts[1]);
         }).then(function(allowance){
           assert.equal(allowance.toNumber(), 2);
