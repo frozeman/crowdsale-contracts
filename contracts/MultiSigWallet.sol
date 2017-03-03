@@ -35,59 +35,50 @@ contract MultiSigWallet {
     }
 
     modifier onlyWallet() {
-        if (msg.sender != address(this))
-            throw;
+        if (msg.sender != address(this)) throw;
         _;
     }
 
     modifier ownerDoesNotExist(address owner) {
-        if (isOwner[owner])
-            throw;
+        if (isOwner[owner]) throw;
         _;
     }
 
     modifier ownerExists(address owner) {
-        if (!isOwner[owner])
-            throw;
+        if (!isOwner[owner]) throw;
         _;
     }
 
     modifier transactionExists(uint transactionId) {
-        if (transactions[transactionId].destination == 0)
-            throw;
+        if (transactions[transactionId].destination == 0) throw;
         _;
     }
 
     modifier confirmed(uint transactionId, address owner) {
-        if (!confirmations[transactionId][owner])
-            throw;
+        if (!confirmations[transactionId][owner]) throw;
         _;
     }
 
     modifier notConfirmed(uint transactionId, address owner) {
-        if (confirmations[transactionId][owner])
-            throw;
+        if (confirmations[transactionId][owner]) throw;
         _;
     }
 
     modifier notExecuted(uint transactionId) {
-        if (transactions[transactionId].executed)
-            throw;
+        if (transactions[transactionId].executed) throw;
         _;
     }
 
     modifier notNull(address _address) {
-        if (_address == 0)
-            throw;
+        if (_address == 0) throw;
         _;
     }
 
     modifier validRequirement(uint ownerCount, uint _required) {
-        if (   ownerCount > MAX_OWNER_COUNT
-            || _required > ownerCount
-            || _required == 0
-            || ownerCount == 0)
-            throw;
+        if (ownerCount > MAX_OWNER_COUNT) throw;
+        if (_required > ownerCount) throw;
+        if (_required == 0) throw;
+        if (ownerCount == 0) throw;
         _;
     }
 

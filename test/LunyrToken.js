@@ -16,17 +16,21 @@ let NewToken = artifacts.require('NewToken');
 
 
 contract('Crowdsale', function(accounts){
-  let prefix = 'Before Crowdsale --';
+  let prefix = 'Before Crowdsale -- ';
   // ---------------------------------------------
   // ------------- BEFORE CROWDSALE --------------
   // ---------------------------------------------
   it(prefix + 'getState returns PreFunding', function(done) {
+    let upgradeMaster, startBlock, endBlock, token;
     MultiSigWallet.new(accounts, 3).then(function(wallet){
-      const upgradeMaster = accounts[0];
-      const startBlock = web3.eth.blockNumber + 10;
-      const endBlock = startBlock + 1;
+      upgradeMaster = accounts[0];
+      startBlock = web3.eth.blockNumber + 10;
+      endBlock = startBlock + 1;
       return LunyrToken.new(wallet.address, upgradeMaster, startBlock, endBlock);
-    }).then(function(token){
+    }).then(function(instance){
+      token = instance;
+      return utils.assertThrows(LunyrToken.new(accounts[0], upgradeMaster, startBlock, endBlock), 'cannot create token with fake wallet');
+    }).then(function(){
       return token.getState();
     }).then(function(state){
       assert.equal(state, utils.crowdsaleState.PREFUNDING);
@@ -177,7 +181,7 @@ contract('Crowdsale', function(accounts){
   // // // // ---------------------------------------------
   // // // // ------------- DURING CROWDSALE --------------
   // // // // ---------------------------------------------
-  prefix = 'During Crowdsale --';
+  prefix = 'During Crowdsale -- ';
   it(prefix + 'getState returns Funding', function(done) {
     let startBlock = 0;
     let endBlock = 0;
@@ -399,7 +403,7 @@ contract('Crowdsale', function(accounts){
   // // // // ---------------------------------------------
   // // // // ------------- SUCCESSFUL CROWDSALE ----------
   // // // // ---------------------------------------------
-  prefix = 'Successful Crowdsale --';
+  prefix = 'Successful Crowdsale -- ';
   it(prefix + 'getState returns Success after tokenCreationMax', function(done) {
     let startBlock = 0;
     let endBlock = 0;
@@ -630,7 +634,9 @@ contract('Crowdsale', function(accounts){
     }).then(function(){
       // can't do it from non-upgradeMaster
       utils.assertThrows(token.setUpgradeAgent(upgradeAgent.address, {from:accounts[3]}), 'must setUpgradeAgent from upgradeMaster');
+      // can't set it to some random address
       utils.assertThrows(token.setUpgradeAgent(accounts[3], {from:upgradeMaster}), 'must setUpgradeAgent to an actual UpgradeAgent');
+      // can't set upgrade agent to 0
       utils.assertThrows(token.setUpgradeAgent(0), 'must setUpgradeAgent to non-zero address');
     }).then(done).catch(done);
   });
@@ -908,7 +914,7 @@ contract('Crowdsale', function(accounts){
   // // // ---------------------------------------------
   // // // ------------- FAILED CROWDSALE --------------
   // // // ---------------------------------------------
-  prefix = 'Failed Crowdsale --';
+  prefix = 'Failed Crowdsale -- ';
   it(prefix + 'getState returns Failed after fundingEndBlock', function(done) {
     let startBlock = 0;
     let endBlock = 0;

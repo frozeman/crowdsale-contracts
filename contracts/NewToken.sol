@@ -140,7 +140,7 @@ contract UpgradeAgent is SafeMath {
 
     /// @notice Sets the new token contract address
     /// @param _newToken The address of the new token contract
-    function setNewToken(address _newToken) {
+    function setNewToken(address _newToken) external {
         if (msg.sender != owner) throw;
         if (_newToken == 0x0) throw;
         if (upgradeHasBegun) throw; // Cannot change token after upgrade has begun
@@ -178,7 +178,7 @@ contract UpgradeAgent is SafeMath {
         safetyInvariantCheck(0);
     }
 
-    function finalizeUpgrade() public {
+    function finalizeUpgrade() external {
         if (msg.sender != address(oldToken)) throw;
         if (upgradeFinalized) throw;
 
