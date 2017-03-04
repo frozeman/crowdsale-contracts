@@ -15,8 +15,8 @@ contract NewToken is ERC20, SafeMath {
     bool public isNewToken = false;
 
     // Token information
-    mapping (address => uint256) public balances;
-    mapping (address => mapping (address => uint256)) public allowed;
+    mapping (address => uint256) balances;
+    mapping (address => mapping (address => uint256)) allowed;
 
     bool public upgradeFinalized = false;
 
@@ -113,11 +113,11 @@ contract UpgradeAgent is SafeMath {
     event InvariantCheck(uint oldTokenSupply, uint newTokenSupply, uint originalSupply, uint value);
 
     function UpgradeAgent(address _oldToken) {
-        if (_oldToken == 0x0) throw;
+        //if (_oldToken == 0x0) throw;
         owner = msg.sender;
         isUpgradeAgent = true;
         oldToken = OldToken(_oldToken);
-        if (!oldToken.isLunyrToken()) throw;
+        //if (!oldToken.isLunyrToken()) throw;
     }
 
     /// @notice Check to make sure that the current sum of old and
@@ -187,7 +187,6 @@ contract UpgradeAgent is SafeMath {
         upgradeFinalized = true;
 
         newToken.finalizeUpgrade();
-
     }
 
     /// @dev Fallback function allows to deposit ether.

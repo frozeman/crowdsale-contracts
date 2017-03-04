@@ -1,10 +1,16 @@
-// taken/borrowed from ROSCA/WeTrust https://github.com/WeTrustPlatform/rosca-contracts/blob/b72ee795d2a73b5fda76b7015720b6ea5f8c8804/test/bidUnitTest.js#L21
+// taken/borrowed from ROSCA/WeTrust https://github.com/WeTrustPlatform/rosca-contracts/blob/b72ee795d2a73b5fda76b7015720b6ea5f8c8804/test/utils/utils.js
+// thanks!
+
 
 let assert = require('chai').assert;
 const MAX_GAS_COST_PER_TX = 1e5 /* gas used per tx */ * 2e10; /* gas price */
 
+// we need this becaues test env is different than script env
+let myWeb3 = (typeof web3 === undefined ? undefined : web3);
+
 
 module.exports = {
+
   crowdsaleState: {
     PREFUNDING: 0,
     FUNDING: 1,
@@ -29,14 +35,14 @@ module.exports = {
     });
   },
   getFunctionSelector: function(functionSignature) {
-    return web3.sha3(functionSignature).slice(0,10);
+    return myWeb3.sha3(functionSignature).slice(0,10);
   },
   // TODO: make this more robust, can args be a single entity, not an array, replace spaces in signature,...
   getFunctionEncoding: function(functionSignature, args) {
     selector = this.getFunctionSelector(functionSignature);
     argString = '';
     for (let i = 0; i < args.length; i++) {
-      paddedArg = web3.toHex(args[i]).slice(2);
+      paddedArg = myWeb3.toHex(args[i]).slice(2);
       while (paddedArg.length % 64 != 0) {
         paddedArg = '0' + paddedArg;
       }
@@ -48,7 +54,7 @@ module.exports = {
     return new Promise(function(resolve, reject) {
       transactionPromise.then(function(txId) {
         resolve({
-          gasUsed: web3.eth.getTransactionReceipt(txId).gasUsed,
+          gasUsed: myWeb3.eth.getTransactionReceipt(txId).gasUsed,
           extraData: extraData,
         });
       }).catch(function(reason) {
@@ -58,7 +64,7 @@ module.exports = {
   },
 
   increaseTime: function(bySeconds) {
-    web3.currentProvider.send({
+    myWeb3.currentProvider.send({
       jsonrpc: "2.0",
       method: "evm_increaseTime",
       params: [bySeconds],
@@ -67,7 +73,7 @@ module.exports = {
   },
 
   mineOneBlock: function() {
-    web3.currentProvider.send({
+    myWeb3.currentProvider.send({
       jsonrpc: "2.0",
       method: "evm_mine",
       id: new Date().getTime(),
@@ -75,10 +81,12 @@ module.exports = {
   },
 
   mineToBlockHeight: function(targetBlockHeight) {
-    while (web3.eth.blockNumber < targetBlockHeight) {
+    while (myWeb3.eth.blockNumber < targetBlockHeight) {
       this.mineOneBlock();
     }
   },
-
+  setWeb3: function(web3) {
+    myWeb3 = web3;
+  },
 
 };

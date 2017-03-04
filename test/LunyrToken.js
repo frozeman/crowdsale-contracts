@@ -529,6 +529,10 @@ contract('Crowdsale', function(accounts){
       assert.equal(state, utils.crowdsaleState.SUCCESS);
       // can't finalizeUpgrade until we set upgradeAgent
       utils.assertThrows(token.finalizeUpgrade({from: upgradeMaster}), 'expected finalizeUpgrade to fail');
+    //   functionData = utils.getFunctionEncoding('UpgradeAgent(address)',[token.address]);
+    //   return web3.eth.estimateGas({data:functionData});
+    // }).then(function(gasEstimate){
+    //   console.log('UpgradeAgent constructor cost: ' + gasEstimate);
       return UpgradeAgent.new(token.address, {from: agentOwner});
     }).then(function(agent){
       upgradeAgent = agent;
