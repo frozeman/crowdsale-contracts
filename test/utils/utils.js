@@ -21,6 +21,7 @@ module.exports = {
   gasEpsilon: 5000,
   startBlockMainNet: 3445888,
   endBlockMainNet: 3618688,
+  multisigWalletAddressMainNet: '0x0',
   afterFee: function(amount, serviceFeeInThousandths) {
     return amount / 1000 * (1000 - serviceFeeInThousandths);
   },
@@ -35,6 +36,11 @@ module.exports = {
     });
   },
   getFunctionSelector: function(functionSignature) {
+    // no spaces
+    functionSignature = functionSignature.replace(/ /g, '');
+    // no uints, only uint256s
+    functionSignature = functionSignature.replace(/uint,/g, 'uint256,');
+    functionSignature = functionSignature.replace(/uint\)/g, 'uint256)');
     return myWeb3.sha3(functionSignature).slice(0,10);
   },
   // TODO: make this more robust, can args be a single entity, not an array, replace spaces in signature,...
