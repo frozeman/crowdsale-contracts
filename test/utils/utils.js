@@ -1,6 +1,7 @@
 // taken/borrowed from ROSCA/WeTrust https://github.com/WeTrustPlatform/rosca-contracts/blob/b72ee795d2a73b5fda76b7015720b6ea5f8c8804/test/utils/utils.js
 // thanks!
-
+var Web3 = require('web3');
+var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
 let assert = require('chai').assert;
 const MAX_GAS_COST_PER_TX = 1e5 /* gas used per tx */ * 2e10; /* gas price */
