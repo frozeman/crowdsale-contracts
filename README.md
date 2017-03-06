@@ -12,12 +12,12 @@ We have 1200+ lines of tests. There are two test files:
 
 Instructions
 -------------
--2. Open a terminal
--1. [Install npm](http://lmgtfy.com/?q=how+to+install+npm)
-0. Clone the repository "git clone https://github.com/Lunyr/crowdsale-contracts.git"
-1. In the repository, run "npm install"
-2. Run testrpc (see below)
-3. In another terminal, run "truffle test"
+1. Open a terminal
+2. [Install npm](http://lmgtfy.com/?q=how+to+install+npm)
+3. Clone the repository "git clone https://github.com/Lunyr/crowdsale-contracts.git"
+4. In the repository, run "npm install"
+5. Run testrpc (see below)
+6. In another terminal, run "truffle test"
 
 The testrpc command we use is
 
